@@ -36,7 +36,7 @@ class Settings(BaseSettings):
     # 注意这里对象名必须叫model_config ，而且必须定义，否则配置会被回收
     model_config = SettingsConfigDict(env_file=ENV_FILE, extra="ignore", env_file_encoding="utf-8")
 
-
+#延迟加载
 @lru_cache
 def get_settings():
     print("get_settings----测试如果调用两次就会打印两次，实际只打印一次")
@@ -45,7 +45,7 @@ def get_settings():
 
 # @lru_cache 会修改它所装饰的函数，
 # 使其返回第一次返回的相同值，而不是每次都重新计算并执行函数代码。
-settings = get_settings()
+settings = get_settings()#预加载
 
 if __name__ == '__main__':
     # 第一次访问
