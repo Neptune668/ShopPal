@@ -39,7 +39,7 @@ class Settings(BaseSettings):
 
 @lru_cache
 def get_settings():
-    print("get_settings")
+    print("get_settings----测试如果调用两次就会打印两次，实际只打印一次")
     return Settings()
 
 

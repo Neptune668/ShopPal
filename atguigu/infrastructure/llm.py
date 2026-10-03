@@ -24,4 +24,4 @@ llm: BaseChatModel = init_chat_model(
 )
 
 if __name__ == '__main__':
-    print(llm.invoke("你好").content)
+    print(llm.invoke("你好,你是什么模型").content)
