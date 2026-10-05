@@ -78,14 +78,11 @@ class StartFlowStep(FlowStep):
     """
     流程步骤：开始
     """
+    type: FlowStepType = FlowStepType.START
 
-
-type: FlowStepType = FlowStepType.START
-
-
-@classmethod
-def from_dict(cls, step_data: dict[str, Any]) -> "StartFlowStep":
-    return cls(**FlowStep.base_fields(step_data))
+    @classmethod
+    def from_dict(cls, step_data: dict[str, Any]) -> "StartFlowStep":
+        return cls(**FlowStep.base_fields(step_data))
 
 
 class EndFlowStep(FlowStep):

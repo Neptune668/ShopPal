@@ -32,6 +32,7 @@ class BotMessage(BaseModel):
     text: str | None = None
     object: FocusedObject | None = None
 
+
 if __name__ == '__main__':
     fo = FocusedObject(id="1", type="2")
 
