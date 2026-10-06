@@ -7,9 +7,7 @@ from atguigu.domain.messages import UserMessage, ProcessResult, BotMessage
 class DialogueEngine:
 
     async def process_message(self, dialogue_state: DialogueState,
-                            user_message: UserMessage) -> ProcessResult:
-
-
+                              user_message: UserMessage) -> ProcessResult:
         # TODO (用户的消息---->LLM路由(三条轨道的某一条) 执行某一条)
 
         return ProcessResult(
