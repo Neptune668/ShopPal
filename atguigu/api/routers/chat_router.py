@@ -3,7 +3,7 @@ import uuid
 from fastapi import APIRouter, Depends
 
 from atguigu.api.routers.dependencies import get_dialogue_service
-from atguigu.api.schemas import ChatRequest, ChatResponse, ChatBotMessage, ChatObject
+from atguigu.api.schemas import ChatRequest, ChatResponse, ChatBotMessage, ChatObject, HistoryResponse, HistoryMessage
 from atguigu.domain.messages import ProcessResult, UserMessage, MessageType, FocusedObject
 from atguigu.service.dialogue_service import DialogueService
 
@@ -57,13 +57,26 @@ def _build_chat_response(process_result: ProcessResult) -> ChatResponse:
         messages=[
             ChatBotMessage(
                 text=bot_msg.text,
-                object=ChatObject(
-                    type=bot_msg.object.type,
-                    id=bot_msg.object.id,
-                    title=bot_msg.object.title,
-                    attributes=bot_msg.object.attributes
-                ) if bot_msg.object else None
+                # 这里解构不能直接用对象，因为对象是可变的;
+                # 解构后会改变原对象，导致后续的解构失败(转dict)
+                object=ChatObject(**bot_msg.object.model_dump()) if bot_msg.object else None
+                # 原有逐字段映射写法：
+                # object=ChatObject(
+                #     type=bot_msg.object.type,
+                #     id=bot_msg.object.id,
+                #     title=bot_msg.object.title,
+                #     attributes=bot_msg.object.attributes
+                # ) if bot_msg.object else None
             )
             for bot_msg in process_result.messages
         ]
+    )
+@router.get('/api/chat/history')
+async def history(sender_id: str) -> HistoryResponse:
+    return HistoryResponse(
+        sender_id=sender_id,
+        messages=[
+            HistoryMessage(role='user', text='你好'),
+            HistoryMessage(role='bot', text='我不好'),
+        ],
     )

@@ -10,7 +10,7 @@ from atguigu.engine.dialogue_engine import DialogueEngine
 from atguigu.infrastructure import database
 
 # 不要通过这种方式引入async_session，会是一个NoneType
-# from atguigu.infrastructure.database import async_session
+from atguigu.infrastructure.database import async_session
 
 async def get_session():
     """
