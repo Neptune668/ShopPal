@@ -1,6 +1,8 @@
 # atguigu/api/dependencies.py
 
-from fastapi import Depends, Path
+from pathlib import Path
+
+from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from atguigu.plan.turn_planner import TurnPlanner
