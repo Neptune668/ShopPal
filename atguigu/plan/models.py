@@ -6,18 +6,20 @@ from pydantic import BaseModel
 
 
 class TaskTurnPlan(BaseModel):
-    commands: list[Command] = [] # 命令
+    commands: list[Command] = []  # 命令
 
     @classmethod
     def from_dict(cls, data: dict) -> "TaskTurnPlan":
         return cls(commands=[Command.from_dict(command) for command in data["commands"]])
 
+
 class KnowledgeTurnPlan(BaseModel):
-    intents: list[str] = [] # 意图
+    intents: list[str] = []  # 意图
 
     @classmethod
     def from_dict(cls, data: dict) -> "KnowledgeTurnPlan":
         return cls(intents=data["intents"])
+
 
 class ChitchatTurnPlan(BaseModel):
     pass
@@ -42,8 +44,24 @@ class TurnPlan(BaseModel):
         )
 
 
-if __name__ == '__main__':
+class ClarifyReason(str, Enum):
+    MISSING_TRACK = "missing_track"
+    MULTIPLE_TRACKS = "multiple_tracks"
+    MISSING_TASK_COMMANDS = "missing_task_commands"
+    MISSING_KNOWLEDGE_INTENT = "missing_knowledge_intent"
+    MISSING_FOCUSED_OBJECT = "missing_focused_object"
+    OBJECT_REQUIRES_INTENT = "object_requires_intent"
+    INVALID_TASK_COMMANDS = "invalid_task_commands"
+    MULTIPLE_TASK_FLOWS = "multiple_task_flows"
+    UNKNOWN_TASK_FLOW = "unknown_task_flow"
 
+
+class TurnPlanValidationResult(BaseModel):
+    valid: bool  # 是否有效
+    reason: ClarifyReason | None = None  # 无效时的原因
+
+
+if __name__ == '__main__':
     json_str1 = """
     {
       "task": {
