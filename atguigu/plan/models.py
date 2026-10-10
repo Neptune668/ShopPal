@@ -1,5 +1,6 @@
 # atguigu/plan/models.py
 import json
+from enum import Enum
 
 from atguigu.task.command.models import Command
 from pydantic import BaseModel
