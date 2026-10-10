@@ -11,18 +11,18 @@ class DialogueEngine:
     def __init__(
             self,
             turn_planner: TurnPlanner,
-            task_handler: TaskHandler
-            # knowledge_handler: KnowledgeHandler,
+            task_handler: TaskHandler,
+            knowledge_handler: KnowledgeHandler,
             # chitchat_handler: ChitchatHandler,
             # clarify_responder: ClarifyResponder,
-            # turn_plan_validator: TurnPlanValidator
+            turn_plan_validator: TurnPlanValidator
     ) -> None:
         self.turn_planner = turn_planner
         self.task_handler = task_handler
-        # self.knowledge_handler = knowledge_handler
+        self.knowledge_handler = knowledge_handler
         # self.chitchat_handler = chitchat_handler
         # self.clarify_responder = clarify_responder
-        # self.turn_plan_validator = turn_plan_validator
+        self.turn_plan_validator = turn_plan_validator
 
     async def process_message(self, dialogue_state: DialogueState,
                               user_message: UserMessage) -> ProcessResult:
