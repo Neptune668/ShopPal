@@ -5,7 +5,7 @@
 """
 import uvicorn
 
-from atguigu.conf.config import settings
+from atguigu.infrastructure.config import settings
 
 if __name__ == '__main__':
     uvicorn.run(

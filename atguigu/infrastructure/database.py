@@ -5,7 +5,7 @@ import asyncio
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession, create_async_engine, AsyncEngine
 
-from atguigu.conf.config import settings
+from atguigu.infrastructure.config import settings
 
 # 声明全局变量
 # engine            ：异步数据库引擎，负责管理连接池和与数据库的通信

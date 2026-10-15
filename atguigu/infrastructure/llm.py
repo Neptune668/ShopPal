@@ -5,7 +5,7 @@
 from langchain.chat_models import init_chat_model
 from langchain_core.language_models import BaseChatModel
 
-from atguigu.conf.config import settings
+from atguigu.infrastructure.config import settings
 
 """
 如果没有 BaseChatModel，你可能需要：
