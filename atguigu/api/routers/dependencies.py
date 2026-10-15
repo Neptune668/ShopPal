@@ -5,7 +5,10 @@ from pathlib import Path
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from atguigu.knowledge.handler import KnowLedgeHandler
+from atguigu.knowledge.intents import KNOWLEDGE_INTENTS
 from atguigu.plan.turn_planner import TurnPlanner
+from atguigu.plan.turn_validator import TurnPlanValidator
 from atguigu.service.dialogue_service import DialogueService
 from atguigu.repository.dialogue_state_repository import DialogueStateRepository
 from atguigu.engine.dialogue_engine import DialogueEngine
@@ -57,7 +60,10 @@ async def get_engine():
     loader = FlowLoader()
     flow_list = loader.load_many([user_flow_path, system_flow_path])
 
-    return DialogueEngine(turn_planner=TurnPlanner(), task_handler=TaskHandler(flows=flow_list))
+    return DialogueEngine(turn_planner=TurnPlanner(), task_handler=TaskHandler(flows=flow_list),
+                          turn_plan_validator=TurnPlanValidator(),
+                          knowledge_handler = KnowLedgeHandler(knowledge_intents=KNOWLEDGE_INTENTS)
+                          )
 
 # 5. 创建 DialogueService 实例
 async def get_dialogue_service(

@@ -2,13 +2,13 @@
 
 from pydantic import BaseModel
 
+
 class KnowledgeIntent(BaseModel):
     id: str
     description: str
     provider_ids: list[str] = []
     requires_object: str | None = None
 
-# atguigu/knowledge/intents.py
 
 KNOWLEDGE_INTENTS: dict[str, KnowledgeIntent] = {
     "product_info": KnowledgeIntent(

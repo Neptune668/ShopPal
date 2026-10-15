@@ -46,15 +46,17 @@ class TurnPlan(BaseModel):
 
 
 class ClarifyReason(str, Enum):
-    MISSING_TRACK = "missing_track"
-    MULTIPLE_TRACKS = "multiple_tracks"
-    MISSING_TASK_COMMANDS = "missing_task_commands"
-    MISSING_KNOWLEDGE_INTENT = "missing_knowledge_intent"
-    MISSING_FOCUSED_OBJECT = "missing_focused_object"
-    OBJECT_REQUIRES_INTENT = "object_requires_intent"
-    INVALID_TASK_COMMANDS = "invalid_task_commands"
-    MULTIPLE_TASK_FLOWS = "multiple_task_flows"
-    UNKNOWN_TASK_FLOW = "unknown_task_flow"
+    MISSING_TRACK = "missing_track"  # 【第一组：轨道层面】task / knowledge / chitchat 三个都为 null，没判断出任何方向
+    MULTIPLE_TRACKS = "multiple_tracks"  # 【第一组：轨道层面】同时命中多个轨道，但引擎一次只能执行一个
+
+    MISSING_KNOWLEDGE_INTENT = "missing_knowledge_intent"  # 【第三组：knowledge / 对象相关】knowledge 轨道，但 intents 为空
+    MISSING_FOCUSED_OBJECT = "missing_focused_object"  # 【第三组：knowledge / 对象相关】知识意图需要聚焦对象，但当前没有
+    OBJECT_REQUIRES_INTENT = "object_requires_intent"  # 【第三组：knowledge / 对象相关】用户只发了对象，没说要干嘛（对象消息处理时会用到）
+
+    MISSING_TASK_COMMANDS = "missing_task_commands"  # 【第二组：task 轨道内部】task 轨道，但 commands 为空
+    INVALID_TASK_COMMANDS = "invalid_task_commands"  # 【第二组：task 轨道内部】commands 里有不认识的命令类型
+    MULTIPLE_TASK_FLOWS = "multiple_task_flows"  # 【第二组：task 轨道内部】一次出现多个 `start_flow`，同时想开好几个流程
+    UNKNOWN_TASK_FLOW = "unknown_task_flow"  # 【第二组：task 轨道内部】`start_flow` 指定的 flow 在系统里不存在（典型幻觉）
 
 
 class TurnPlanValidationResult(BaseModel):
