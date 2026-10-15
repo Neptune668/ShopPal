@@ -102,10 +102,14 @@ class DialogueEngine:
         # 1. 调 LLM 生成本轮计划（确定任务轨道）
         turn_plan = await self.turn_planner.predict(dialogue_state, self.task_handler.flows)
 
-        # 2. 防幻觉校验(本节不实现,后面讲)
+        # 2. 防幻觉校验
         validated = self.turn_plan_validator.validate(dialogue_state, turn_plan,
                                                       self.task_handler.flows,
                                                       self.knowledge_handler.knowledge_intents)
+
+        # 2.1 校验不通过则澄清意图
+        if not validated.valid:
+            return await self.clarify_responder.respond(dialogue_state, validated.reason)
 
         # 3. 按轨道分发
         if turn_plan.task is not None:
