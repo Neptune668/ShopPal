@@ -3,6 +3,7 @@
 from atguigu.domain.messages import BotMessage
 from atguigu.domain.state import DialogueState
 from atguigu.task.command.models import Command
+from atguigu.task.command.processor import CommandProcessor
 from atguigu.task.flow.flows import FlowsList
 
 
