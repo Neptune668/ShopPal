@@ -75,32 +75,66 @@ class DialogueState(BaseModel):
         self.paused_tasks.append(self.active_task)
         self.active_task = None
 
-    def resumed_active_task(self, flow_id: str | None):
+    # def resumed_active_task(self, flow_id: str | None):
+    #     """
+    #     恢复业务任务:流程ID
+    #     按 flow_id 在挂起列表里找一个任务，恢复为活跃任务，并从挂起列表里移除。
+    #     调用时机：用户说"继续刚才的退款"这类意图时。
+    #
+    #     注意：任务被恢复时，step_id 和 slots 都还在，所以可以从挂起前的位置接着跑，不用从头来。
+    #     :return:
+    #     """
+    #     # 1. 恢复最近的任务
+    #     if not flow_id:
+    #         task = self.paused_tasks.pop()
+    #         self.active_task = task
+    #         return
+    #
+    #     # 2. 精确恢复某一暂停的业务任务
+    #     for task in self.paused_tasks:
+    #         if task.flow_id == flow_id:
+    #             self.active_task = task
+    #             self.paused_tasks.remove(task)
+    #             return
+    #
+    #     # 3. 兜底
+    #     task = self.paused_tasks.pop()
+    #     self.active_task = task
+
+    def resumed_active_task(self, flow_id: str | None = None) -> bool:
         """
         恢复业务任务:流程ID
-        按 flow_id 在挂起列表里找一个任务，恢复为活跃任务，并从挂起列表里移除。
+
+        如果用户没有明确指定需要恢复的具体任务，那么 flow_id = None，恢复最近的任务
+        如果用户明确指定需要恢复的具体任务：
+          则按 flow_id 在挂起列表里找到这个任务，恢复为活跃任务，并从挂起列表里移除。
+
         调用时机：用户说"继续刚才的退款"这类意图时。
 
         注意：任务被恢复时，step_id 和 slots 都还在，所以可以从挂起前的位置接着跑，不用从头来。
-        :return:
+
+        :return: 恢复成功或失败
         """
-        # 1. 恢复最近的任务
-        if not flow_id:
-            task = self.paused_tasks.pop()
-            self.active_task = task
-            return
 
-        # 2. 精确恢复某一暂停的业务任务
-        for task in self.paused_tasks:
-            if task.flow_id == flow_id:
-                self.active_task = task
-                self.paused_tasks.remove(task)
-                return
+        # 1. 判断栈中是否存在中断的业务任务
+        if not self.paused_tasks:
+            return False
 
-        # 3. 兜底
-        task = self.paused_tasks.pop()
-        self.active_task = task
+        # 2. 如果业务流程ID不存在
+        if flow_id is None:
+            self.active_task = self.paused_tasks.pop()
+            return True
 
+        # 2. 如果业务流程ID存在
+        for i, paused_task in enumerate(self.paused_tasks):
+            if paused_task.flow_id == flow_id:
+                # 激活
+                self.active_task = paused_task
+                # 删除
+                del self.paused_tasks[i]
+                return True
+
+        return False
     def start_active_system_task(self, active_system_task: SystemContext):
         """
         开启系统流程
