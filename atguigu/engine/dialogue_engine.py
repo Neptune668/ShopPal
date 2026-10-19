@@ -44,7 +44,7 @@ class DialogueEngine:
         if user_message.type is MessageType.TEXT:
             messages = await self._handle_text_message(dialogue_state)
         else:
-            # 对象消息(本节不实现,后面讲)
+            # 对象消息
             dialogue_state.set_focused_object(user_message.object)
             messages = await self._handle_object_message(user_message, dialogue_state)
 
@@ -118,8 +118,7 @@ class DialogueEngine:
                 state=dialogue_state,
             )
         elif turn_plan.knowledge is not None:
-            # TODO(本节不实现,后面讲)
-            return None
+            return self.knowledge_handler.handle()
         else:
             # TODO(本节不实现,后面讲)
             return None
