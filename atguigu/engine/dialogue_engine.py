@@ -100,8 +100,8 @@ class DialogueEngine:
     async def _handle_text_message(self, dialogue_state: DialogueState) -> list[BotMessage]:
 
         # 1. 调 LLM 生成本轮计划（确定任务轨道）
-        turn_plan = await self.turn_planner.predict(dialogue_state, self.task_handler.flows)
-
+        turn_plan = await self.turn_planner.predict(dialogue_state, self.task_handler.flows,
+                                                    self.knowledge_handler.knowledge_intents)
         # 2. 防幻觉校验
         validated = self.turn_plan_validator.validate(dialogue_state, turn_plan,
                                                       self.task_handler.flows,

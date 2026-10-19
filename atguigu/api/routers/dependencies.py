@@ -19,6 +19,7 @@ from atguigu.infrastructure import database
 
 # 不要通过这种方式引入async_session，会是一个NoneType
 from atguigu.infrastructure.database import async_session
+from atguigu.task.command.processor import CommandProcessor
 from atguigu.task.flow.loader import FlowLoader
 from atguigu.task.handler import TaskHandler
 
@@ -61,11 +62,11 @@ async def get_engine():
     loader = FlowLoader()
     flow_list = loader.load_many([user_flow_path, system_flow_path])
 
-    return DialogueEngine(turn_planner=TurnPlanner(), task_handler=TaskHandler(flows=flow_list),
+    return DialogueEngine(turn_planner=TurnPlanner(),
+                          task_handler=TaskHandler(flows=flow_list, command_processor=CommandProcessor()),
                           turn_plan_validator=TurnPlanValidator(),
-                          knowledge_handler = KnowLedgeHandler(knowledge_intents=KNOWLEDGE_INTENTS),
-                          clarify_responder = ClarifyResponder()
-                          
+                          knowledge_handler=KnowLedgeHandler(knowledge_intents=KNOWLEDGE_INTENTS),
+                          clarify_responder=ClarifyResponder()
                           )
 
 # 5. 创建 DialogueService 实例
